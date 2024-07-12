@@ -1,0 +1,304 @@
+<!doctype html>
+<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Value of Money Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #007acc;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .answers {
+            list-style-type: none;
+            padding: 0;
+        }
+        .answers li {
+            margin-bottom: 10px;
+        }
+        .answers button {
+            background-color: #007acc;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .answers button:hover {
+            background-color: #005f99;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+        }
+        .navigation button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .navigation button:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .question-number {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .intro-section {
+            text-align: left;
+        }
+        .intro-section h2 {
+            color: #333;
+        }
+        .intro-section ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        .intro-section li {
+            margin-bottom: 10px;
+        }
+        .intro-section p {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Time Value of Money Concepts Game</h1>
+        <div id="intro" class="intro-section">
+            <h2>Introduction</h2>
+            <p>The time value of money (TVM) is a fundamental concept in finance that recognizes that money available now is worth more than the same amount in the future due to its potential earning capacity. Understanding TVM is crucial for business students because:</p>
+            <ul>
+                <li>It forms the basis for many financial decisions, including investments, loans, and capital budgeting.</li>
+                <li>It helps in comparing cash flows occurring at different times.</li>
+                <li>It's essential for valuing financial assets and making informed business decisions.</li>
+                <li>It demonstrates the importance of investing early and the impact of compound interest.</li>
+            </ul>
+            <h2>Instructions</h2>
+            <p>1. Click "Start Game" to begin.</p>
+            <p>2. You will be presented with 10 random questions about time value of money concepts.</p>
+            <p>3. Select the best answer from the four options provided.</p>
+            <p>4. If you answer incorrectly, you'll have another chance to select the right answer.</p>
+            <p>5. Use the "Previous" and "Next" buttons to navigate between questions.</p>
+            <p>6. Your progress will be shown at the bottom of the screen.</p>
+            <p>Good luck!</p>
+            <button onclick="startGame()">Start Game</button>
+        </div>
+        <div id="game" style="display:none;">
+            <div id="question-container">
+                <div id="question" class="question"></div>
+                <ul id="answers" class="answers"></ul>
+                <div id="question-number" class="question-number"></div>
+            </div>
+            <div class="navigation">
+                <button onclick="prevQuestion()">Previous</button>
+                <button onclick="nextQuestion()">Next</button>
+            </div>
+            <div id="result" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the future value of $5,000 invested for 3 years at an annual interest rate of 6% compounded annually?",
+                answers: ["$5,955.08", "$5,973.82", "$5,940.36", "$5,989.21"],
+                correct: "$5,955.08"
+            },
+            {
+                question: "Calculate the present value of $10,000 to be received in 5 years, assuming a discount rate of 8% compounded annually.",
+                answers: ["$6,805.83", "$6,712.45", "$6,805.32", "$6,730.19"],
+                correct: "$6,805.83"
+            },
+            {
+                question: "If you invest $2,500 at an annual interest rate of 4% compounded semiannually, what will be the value after 4 years?",
+                answers: ["$2,927.14", "$2,935.61", "$2,918.93", "$2,943.28"],
+                correct: "$2,927.14"
+            },
+            {
+                question: "What is the future value of an annuity of $1,200 per year for 5 years at an annual interest rate of 5%?",
+                answers: ["$6,621.34", "$6,588.97", "$6,605.21", "$6,572.83"],
+                correct: "$6,621.34"
+            },
+            {
+                question: "What is the present value of an ordinary annuity of $500 per year for 6 years at an annual discount rate of 7%?",
+                answers: ["$2,415.23", "$2,437.61", "$2,423.89", "$2,401.75"],
+                correct: "$2,415.23"
+            },
+            {
+                question: "If you invest $8,000 at an annual interest rate of 9% compounded annually, what will be the value after 7 years?",
+                answers: ["$14,384.71", "$14,452.93", "$14,318.56", "$14,521.09"],
+                correct: "$14,384.71"
+            },
+            {
+                question: "What is the future value of $3,500 invested for 6 years at an annual interest rate of 7% compounded annually?",
+                answers: ["$5,247.18", "$5,231.64", "$5,263.92", "$5,215.39"],
+                correct: "$5,247.18"
+            },
+            {
+                question: "Calculate the present value of $12,000 to be received in 8 years, assuming a discount rate of 6% compounded annually.",
+                answers: ["$7,524.81", "$7,486.13", "$7,563.69", "$7,447.75"],
+                correct: "$7,524.81"
+            },
+            {
+                question: "If you invest $1,500 at an annual interest rate of 5% compounded quarterly, what will be the value after 3 years?",
+                answers: ["$1,737.24", "$1,743.51", "$1,730.98", "$1,749.79"],
+                correct: "$1,737.24"
+            },
+            {
+                question: "What is the future value of an annuity of $800 per year for 4 years at an annual interest rate of 6%?",
+                answers: ["$3,498.56", "$3,482.19", "$3,514.93", "$3,465.82"],
+                correct: "$3,498.56"
+            },
+            {
+                question: "What is the present value of an ordinary annuity of $700 per year for 5 years at an annual discount rate of 8%?",
+                answers: ["$2,794.23", "$2,812.56", "$2,775.91", "$2,831.18"],
+                correct: "$2,794.23"
+            },
+            {
+                question: "If you invest $4,000 at an annual interest rate of 7% compounded annually, what will be the value after 5 years?",
+                answers: ["$5,606.54", "$5,623.18", "$5,589.91", "$5,639.82"],
+                correct: "$5,606.54"
+            },
+            {
+                question: "What is the future value of $2,000 invested for 4 years at an annual interest rate of 8% compounded semiannually?",
+                answers: ["$2,732.41", "$2,745.63", "$2,719.19", "$2,758.85"],
+                correct: "$2,732.41"
+            },
+            {
+                question: "Calculate the present value of $15,000 to be received in 10 years, assuming a discount rate of 5% compounded annually.",
+                answers: ["$9,203.78", "$9,185.42", "$9,222.14", "$9,167.06"],
+                correct: "$9,203.78"
+            },
+            {
+                question: "If you invest $3,000 at an annual interest rate of 6% compounded monthly, what will be the value after 3 years?",
+                answers: ["$3,584.12", "$3,571.89", "$3,596.35", "$3,559.67"],
+                correct: "$3,584.12"
+            },
+            {
+                question: "What is the future value of an annuity of $1,500 per year for 7 years at an annual interest rate of 4%?",
+                answers: ["$11,653.27", "$11,678.91", "$11,627.63", "$11,704.55"],
+                correct: "$11,653.27"
+            },
+            {
+                question: "What is the present value of an ordinary annuity of $900 per year for 8 years at an annual discount rate of 5%?",
+                answers: ["$5,989.76", "$6,012.34", "$5,967.18", "$6,034.92"],
+                correct: "$5,989.76"
+            },
+            {
+                question: "If you invest $6,000 at an annual interest rate of 8% compounded annually, what will be the value after 6 years?",
+                answers: ["$9,507.32", "$9,485.69", "$9,528.95", "$9,464.06"],
+                correct: "$9,507.32"
+            },
+            {
+                question: "What is the future value of $4,500 invested for 5 years at an annual interest rate of 7% compounded quarterly?",
+                answers: ["$6,352.78", "$6,371.43", "$6,334.14", "$6,390.07"],
+                correct: "$6,352.78"
+            },
+            {
+                question: "Calculate the present value of $20,000 to be received in 15 years, assuming a discount rate of 6% compounded annually.",
+                answers: ["$8,375.21", "$8,394.86", "$8,355.57", "$8,414.50"],
+                correct: "$8,375.21"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let selectedQuestions = [];
+
+        function startGame() {
+            selectedQuestions = questions.sort(() => 0.5 - Math.random()).slice(0, 10);
+            currentQuestionIndex = 0;
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('game').style.display = 'block';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const questionContainer = document.getElementById('question');
+            const answersContainer = document.getElementById('answers');
+            const resultContainer = document.getElementById('result');
+            const questionNumberContainer = document.getElementById('question-number');
+            const question = selectedQuestions[currentQuestionIndex];
+
+            questionContainer.innerText = question.question;
+            answersContainer.innerHTML = '';
+            resultContainer.innerText = '';
+            questionNumberContainer.innerText = `Question ${currentQuestionIndex + 1} of ${selectedQuestions.length}`;
+
+            const shuffledAnswers = question.answers.sort(() => 0.5 - Math.random());
+            shuffledAnswers.forEach(answer => {
+                const li = document.createElement('li');
+                const button = document.createElement('button');
+                button.innerText = answer;
+                button.onclick = () => checkAnswer(answer);
+                li.appendChild(button);
+                answersContainer.appendChild(li);
+            });
+        }
+
+        function checkAnswer(answer) {
+            const resultContainer = document.getElementById('result');
+            if (answer === selectedQuestions[currentQuestionIndex].correct) {
+                resultContainer.innerText = 'Correct!';
+                resultContainer.style.color = 'green';
+            } else {
+                resultContainer.innerText = 'Incorrect. Try again.';
+                resultContainer.style.color = 'red';
+            }
+        }
+
+        function nextQuestion() {
+            const resultContainer = document.getElementById('result');
+            if (resultContainer.innerText === 'Correct!') {
+                if (currentQuestionIndex < selectedQuestions.length - 1) {
+                    currentQuestionIndex++;
+                    showQuestion();
+                } else {
+                    resultContainer.innerText = 'You have completed the game!';
+                    resultContainer.style.color = 'blue';
+                }
+            } else {
+                alert('You must select the correct answer before moving to the next question.');
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        }
+    </script>
+</body>
+</html>
